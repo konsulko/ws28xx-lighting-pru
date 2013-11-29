@@ -1,0 +1,5 @@
+*.pp
+*.obj
+*.stripped
+*.lst
+ws28xx-pru?
