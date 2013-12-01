@@ -23,7 +23,7 @@ $M1:
 	LDI SLOT_COUNT, 0     ; slot counter
 $M2:
 	;* zero memory
-	LDI32 R2, 0xFFFFFFFF; 0
+	LDI32 R2, 0
 	SBBO &R2, R0, 0, 4
 
 	;* next slot
