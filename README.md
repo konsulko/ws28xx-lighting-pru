@@ -28,8 +28,7 @@ Example usage:
 		 Help
 		  s <universe>              select universe 0-11
 		  b 	                    blanks slots 0-255
-		  w <num> <value>           write 24-bit hex RGB value to slot number
-                  w <num> <v1>.<v2>.<v3>    write 24-bit RGB value to slot number
+		  w <num> <v1>.<v2>.<v3>    write 24-bit RGB value to slot number
 		  l                         latch data out the PRU1
 
 		 PRU> s 0
@@ -48,7 +47,7 @@ Example usage:
 		 ...
 		 PRU> l
 
-	         **\* Blinky Lights! \***
+	         ** Blinky Lights! **
 
 Important Notes:
 
