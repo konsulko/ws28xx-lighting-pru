@@ -31,7 +31,7 @@ LDFLAGS=-cr --diag_warning=225 -llnk-am33xx.cmd -x
 STRIPFLAGS=-p
 
 OBJS0:=ws28xx-pru0.obj syscall0.obj debug.obj pru_vring.obj
-OBJS1:=ws28xx-pru1.obj
+OBJS1:=ws28xx-pru1.obj ws28xx-inc.obj
 
 %.obj: %.c
 	$(CC) $(CFLAGS) -c $<
