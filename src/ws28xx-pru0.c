@@ -430,7 +430,7 @@ again:
 		  		" b                         "
 				"blanks slots 0-255\n"
 		  		" w <num> <v1>.<v2>.<v3>    "
-				"write 24-bit RGB value to slot number\n"
+				"write 24-bit GRB value to slot number\n"
 		  		" l                         "
 				"latch data out the PRU1\n");
 		} else if (ch1 == 's') {
