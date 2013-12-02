@@ -74,7 +74,7 @@ $M7:
 	MOV R30.w0, R14.w0
 	DELAY_CYCLES 70 ; delay 0.40 uS - 10 clocks
 
-	;* shift everything left
+	;* shift everything right
 	SHIFT_DATA
 
 	LDI R30.w0, 0x0000
