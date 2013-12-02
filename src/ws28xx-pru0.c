@@ -405,6 +405,7 @@ static int prompt_thread(struct pt *pt)
 	static char ch1;
 	static char *pp;
 	static char linebuf[80];
+	char buf[8];
 	char *p;
 	static int linesz;
 	u32 val;
@@ -413,7 +414,10 @@ static int prompt_thread(struct pt *pt)
 
 	for (;;) {
 again:
-		c_puts("PRU> ");
+		c_puts("PRU");
+		sprintf((char *) &buf, "#%d", current_universe);
+		c_puts(buf);
+		c_puts("> ");
 		linesz = sizeof(linebuf);
 		c_readline(linebuf, linesz);
 		c_puts("\n");

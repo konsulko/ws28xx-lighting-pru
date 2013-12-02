@@ -24,28 +24,28 @@ Example usage:
 		 $ echo BB-BONE-LIGHTING-00 > /sys/devices/bone\_capemgr.\*/slots 
 		 $ minicom -D /dev/vport0p0
 
-		 PRU> ?
+		 PRU#0> ?
 		 Help
 		  s <universe>              select universe 0-11
 		  b 	                    blanks slots 0-255
 		  w <num> <v1>.<v2>.<v3>    write 24-bit GRB value to slot number
 		  l                         latch data out the PRU1
 
-		 PRU> s 0
-		 PRU> b
-		 PRU> e 60
-		 PRU> w 0 255.0.0
-		 PRU> w 1 0.255.0
-		 PRU> w 2 0.0.255
+		 PRU#0> s 0
+		 PRU#0> b
+		 PRU#0> e 60
+		 PRU#0> w 0 255.0.0
+		 PRU#0> w 1 0.255.0
+		 PRU#0> w 2 0.0.255
 		 ...
-		 PRU> s 1
-		 PRU> b
-		 PRU> e 30
-		 PRU> w 0 255.255.0
-		 PRU> w 1 0.255.255
-		 PRU> w 2 255.255.255
+		 PRU#0> s 1
+		 PRU#1> b
+		 PRU#1> e 30
+		 PRU#1> w 0 255.255.0
+		 PRU#1> w 1 0.255.255
+		 PRU#1> w 2 255.255.255
 		 ...
-		 PRU> l
+		 PRU#1> l
 
 	         ** Blinky Lights! **
 
