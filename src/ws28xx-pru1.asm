@@ -41,8 +41,7 @@ $M2:
 	;* Latch Data Out
 	;*
 $M3:
-	LDI R30.w0, 0         ; hold all lines low for 50 microseconds
-	DELAY_CYCLES 10000
+	LATCH_DATA
 
 $M4:
 	;* Spin till we get an update interrupt from PRU0	
@@ -61,25 +60,25 @@ $M6:
 
 	LDI BIT_COUNT, 0      ; bit counter
 $M7:
-	;* Assemble data for output
-	ASSEMBLE_DATA
-
 	;* Logic Low  -> high 0.40 uS -> low 0.85 uS (1.25 uS)
 	;* Logic High -> high 0.80 uS -> low 0.45 uS (1.25 uS)
 	;*
 
 	;* start for logic high + low
 	LDI R30.w0, 0x0FFF
-	DELAY_CYCLES 80 ; delay 0.40 uS
+	DELAY_CYCLES 53 ; delay 0.40 uS - 27 clocks
+
+	;* Assemble data for output
+	ASSEMBLE_DATA
 
 	MOV R30.w0, R14.w0
-	DELAY_CYCLES 80 ; delay 0.40 uS
-
-	LDI R30.w0, 0x0000
-	DELAY_CYCLES 60 ; delay 0.45 uS - 32 clock cycles
+	DELAY_CYCLES 70 ; delay 0.40 uS - 10 clocks
 
 	;* shift everything left
 	SHIFT_DATA
+
+	LDI R30.w0, 0x0000
+	DELAY_CYCLES 90 ; delay 0.45 uS
 
 	ADD BIT_COUNT, BIT_COUNT, 1
 	QBNE $M7, BIT_COUNT, 24

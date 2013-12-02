@@ -29,17 +29,22 @@
 
 DELAY_CYCLES	.macro NR
 
-	LDI32 R14, NR
-	SUB R14, R14, 5		;* function entry + overhead
+	LDI R14, NR
+	SUB R14, R14, 3		;* function entry + overhead
 	LSR R14, R14, 1		;* loop is by two
 $1:
 	SUB R14, R14, 1
+	QBNE $1, R14, 0
 
-	;* allow 32-bits of counting
-	QBNE $1, R14.b0, 0
-	QBNE $1, R14.b1, 0
-	QBNE $1, R14.b2, 0
-	QBNE $1, R14.b3, 0
+	.endm
+
+LATCH_DATA	.macro
+	LDI R15, 200 ;* 50 uS
+$1:
+	DELAY_CYCLES 255
+
+	SUB R15, R15, 1
+	QBNE $1, R15, 0
 
 	.endm
 
@@ -48,44 +53,44 @@ ASSEMBLE_DATA	.macro
 	;* 13 - 27 clock cycles
 
 	;* R14 has the assembled value to pipe out R30
-	LDI32 R14, 0
+	LDI R14, 0
 
-	QBBC $B0, R18, 0
-	OR R14.b0, R14.b0, 1<<0
-$B0:
-	QBBC $B1, R19, 0
-	OR R14.b0, R14.b0, 1<<1
-$B1:
-	QBBC $B2, R20, 0
-	OR R14.b0, R14.b0, 1<<2
-$B2:
-	QBBC $B3, R21, 0
-	OR R14.b0, R14.b0, 1<<3
-$B3:
-	QBBC $B4, R22, 0
-	OR R14.b0, R14.b0, 1<<4
-$B4:
-	QBBC $B5, R23, 0
-	OR R14.b0, R14.b0, 1<<5
-$B5:
-	QBBC $B6, R24, 0
-	OR R14.b0, R14.b0, 1<<6
-$B6:
-	QBBC $B7, R25, 0
-	OR R14.b0, R14.b0, 1<<7
-$B7:
-	QBBC $B8, R26, 0
-	OR R14.b1, R14.b1, 1<<0
-$B8:
-	QBBC $B9, R27, 0
-	OR R14.b1, R14.b1, 1<<1
-$B9:
-	QBBC $B10, R28,0
-	OR R14.b1, R14.b1, 1<<2
-$B10:
-	QBBC $B11, R29,0 
-	OR R14.b1, R14.b1, 1<<3
-$B11:
+	QBBC $1, R18, 0
+	SET R14, R14, 0
+$1:
+	QBBC $2, R19, 0
+	SET R14, R14, 1
+$2:
+	QBBC $3, R20, 0
+	SET R14, R14, 2
+$3:
+	QBBC $4, R21, 0
+	SET R14, R14, 3
+$4:
+	QBBC $5, R22, 0
+	SET R14, R14, 4
+$5:
+	QBBC $6, R23, 0
+	SET R14, R14, 5
+$6:
+	QBBC $7, R24, 0
+	SET R14, R14, 6
+$7:
+	QBBC $8, R25, 0
+	SET R14, R14, 7
+$8:
+	QBBC $9, R26, 0
+	SET R14, R14, 8
+$9:
+	QBBC $10, R27,0
+	SET R14, R14, 9
+$10:
+	QBBC $11, R28,0
+	SET R14, R14, 10
+$11:
+	QBBC $12, R29,0 
+	SET R14, R14, 11
+$12:
 
 	.endm
 
@@ -95,19 +100,19 @@ SHIFT_DATA	.macro
 	;* 12 clock ticks
 
 	;* first 8 bits
-	LSL R18, R18, 1
-	LSL R19, R19, 1
-	LSL R20, R20, 1
-	LSL R21, R21, 1
-	LSL R22, R22, 1
-	LSL R23, R23, 1
-	LSL R24, R24, 1
-	LSL R25, R25, 1
+	LSR R18, R18, 1
+	LSR R19, R19, 1
+	LSR R20, R20, 1
+	LSR R21, R21, 1
+	LSR R22, R22, 1
+	LSR R23, R23, 1
+	LSR R24, R24, 1
+	LSR R25, R25, 1
 	
 	;* second 4 bits
-	LSL R26, R26, 1
-	LSL R27, R27, 1
-	LSL R28, R28, 1
-	LSL R29, R29, 1
+	LSR R26, R26, 1
+	LSR R27, R27, 1
+	LSR R28, R28, 1
+	LSR R29, R29, 1
 
 	.endm
