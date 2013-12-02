@@ -33,14 +33,12 @@ Example usage:
 
 		 PRU#0> s 0
 		 PRU#0> b
-		 PRU#0> e 60
 		 PRU#0> w 0 255.0.0
 		 PRU#0> w 1 0.255.0
 		 PRU#0> w 2 0.0.255
 		 ...
 		 PRU#0> s 1
 		 PRU#1> b
-		 PRU#1> e 30
 		 PRU#1> w 0 255.255.0
 		 PRU#1> w 1 0.255.255
 		 PRU#1> w 2 255.255.255
