@@ -414,10 +414,8 @@ static int prompt_thread(struct pt *pt)
 
 	for (;;) {
 again:
-		c_puts("PRU");
-		sprintf((char *) &buf, "#%d", current_universe);
+		sprintf((char *) &buf, "PRU#%d>", current_universe);
 		c_puts(buf);
-		c_puts("> ");
 		linesz = sizeof(linebuf);
 		c_readline(linebuf, linesz);
 		c_puts("\n");
