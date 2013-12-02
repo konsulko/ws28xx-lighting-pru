@@ -137,7 +137,7 @@ static inline void blank_slots(void) {
 }
 
 static inline void write_data(u32 data, u8 slot_num) {
-	int offset = current_universe + slot_num;
+	int offset = current_universe + (MAX_UNIVERSES * slot_num);
 
 	SHARED_MEM[offset] = data;
 }
@@ -394,6 +394,7 @@ static char *parse_u24(char *p, u32 *valp)
 	p = parse_u32(p, &tval);
 	result |= tval << 16;
 
+	*valp = result;
 	return p;
 }
 
