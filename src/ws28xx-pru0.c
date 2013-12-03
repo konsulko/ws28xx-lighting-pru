@@ -363,7 +363,7 @@ static char *parse_u32(char *str, u32 *valp)
 	u32 tval;
 	char c;
 
-	while (*str == ' ' || *str == '.')
+	while (*str == ' ')
 		str++;
 
 	result = 0;
@@ -380,18 +380,48 @@ static char *parse_u32(char *str, u32 *valp)
 	return str;
 }
 
+
+static char *parse_hex(char *str, u32 *valp)
+{
+	u32 result;
+	u32 tval;
+	char c;
+
+	while (*str == ' ' || *str == '.')
+		str++;
+
+	result = 0;
+	for (;;) {
+		c = *str;
+		tval = (u32)(c - '0');
+		if (tval >= 10) {
+			tval = (u32)(c - 'a');
+			if (tval >= 6)
+				break;
+			tval += 10;
+		}
+		result *= 16;
+		result += tval;
+		str++;
+	}
+	
+	*valp = result;
+	return str;
+}
+
+
 static char *parse_u24(char *p, u32 *valp)
 {
 	u32 result = 0;
 	u32 tval;
 
-	p = parse_u32(p, &tval);
+	p = parse_hex(p, &tval);
 	result |= tval << 0;
 
-	p = parse_u32(p, &tval);
+	p = parse_hex(p, &tval);
 	result |= tval << 8;
 
-	p = parse_u32(p, &tval);
+	p = parse_hex(p, &tval);
 	result |= tval << 16;
 
 	*valp = result;
