@@ -196,6 +196,7 @@ static int event_thread(struct pt *pt)
 				}
 
 				pru_vring_push(&rx_ring, &pvre, rx_len);
+				PT_WAIT_UNTIL(pt, !(PINTC_SRSR0 & BIT(SYSEV_VR_THIS_PRU_TO_ARM)));
 
 				/* VRING PRU -> ARM */
 				SIGNAL_EVENT(SYSEV_VR_THIS_PRU_TO_ARM);
@@ -590,6 +591,7 @@ static int tx_thread(struct pt *pt)
 
 		pru_vring_push_one(&tx_ring, chunk);
 
+		PT_WAIT_UNTIL(pt, !(PINTC_SRSR0 & BIT(SYSEV_VR_THIS_PRU_TO_ARM)));
 		SIGNAL_EVENT(SYSEV_VR_THIS_PRU_TO_ARM);
 	}
 
