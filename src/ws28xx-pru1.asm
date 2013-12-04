@@ -41,17 +41,17 @@ $M2:
 	;* Latch Data Out
 	;*
 $M3:
-	LATCH_DATA
-
-$M4:
-	;* Spin till we get an update interrupt from PRU0	
-	QBBC $M4, R31, 31
-$M5:
 	;* Clear interrupt
 	LDI R4.w2, 0
 	LDI R4.w0, PRU0_PRU1_INTERRUPT 
 	SBCO &R4, CONST_PRUSSINTC, SICR_OFFSET, 4 
 
+	LATCH_DATA
+
+$M4:
+	;* Spin till we get an update interrupt from PRU0	
+	QBBC $M4, R31, 31
+$M5:	
 	LDI SLOT_COUNT, 0     ; slot counter
 	LDI32 OFFSET_REG, CONST_SHARED_MEM
 $M6:
