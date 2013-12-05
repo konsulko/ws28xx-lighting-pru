@@ -33,6 +33,7 @@
  */
 
 
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -123,6 +124,13 @@ static char tx_buf[TX_SIZE];
 	} while (0)
 
 
+/* don't write when other PRU is accessing shared memory */
+#define OTHER_PRU_MEM_LOCK \
+	do { \
+		if (!(PINTC_SRSR0 & BIT(SYSEV_THIS_PRU_TO_OTHER_PRU))) \
+			break; \
+	} while (1)
+
 static inline void blank_slots(u8 universe)
 {
 	int i;
@@ -143,7 +151,30 @@ static inline void write_data(u8 universe, u32 data, u8 slot_num)
 static int handle_downcall(u32 id, u32 arg0, u32 arg1, u32 arg2,
 		u32 arg3, u32 arg4)
 {
-	/* TODO */
+	OTHER_PRU_MEM_LOCK;
+
+	switch (id) {
+		case DC_LED_BLANK:
+			blank_slots(arg0);
+
+			break;
+		case DC_LED_WRITE:
+			write_data(arg0, arg1, arg2);
+
+			break;
+		case DC_LED_WRITE_BURST:
+			/* TODO */
+
+			break;
+		case DC_LED_LATCH:
+			SIGNAL_EVENT(SYSEV_THIS_PRU_TO_OTHER_PRU);
+
+			break;
+		default:
+			sc_printf("bad downcall with id %d", id);
+			/* error */
+			return -EINVAL;
+	}
 
 	return 0;
 }

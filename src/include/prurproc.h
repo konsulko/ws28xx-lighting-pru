@@ -2,8 +2,9 @@
 #define PRURPROC_H
 
 /* down call IDs */
-#define DC_PWM_CONFIG	0	/* pwm, hi, lo */
-#define DC_PWM_ENABLE	1	/* pwm */
-#define DC_PWM_DISABLE	2	/* pwm */
+#define DC_LED_BLANK		0
+#define DC_LED_WRITE		1
+#define DC_LED_WRITE_BURST	2
+#define DC_LED_LATCH		3
 
 #endif
