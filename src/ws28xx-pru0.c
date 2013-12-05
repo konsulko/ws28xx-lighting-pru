@@ -505,6 +505,8 @@ again:
 		ch1 = linebuf[0];
 		pp = "";
 
+		PT_WAIT_UNTIL(pt, !(PINTC_SRSR0 & BIT(SYSEV_THIS_PRU_TO_OTHER_PRU)));
+
 		if (ch1 == '?') {
 			c_puts("Help\n"
 		 		" s <universe>              "
@@ -540,8 +542,6 @@ again:
 	 		*/
 
 			SIGNAL_EVENT(SYSEV_THIS_PRU_TO_OTHER_PRU);
-
-			PT_WAIT_UNTIL(pt, !(PINTC_SRSR0 & BIT(SYSEV_THIS_PRU_TO_OTHER_PRU)));
 		} else {
 			pp = "*BAD*\n";
 		}
