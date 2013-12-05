@@ -21,7 +21,7 @@ Universe Pin Mappings on Beagebone Black/White:
 
 Example usage:
 
-		 $ echo BB-BONE-LIGHTING-00 > /sys/devices/bone\_capemgr.\*/slots 
+		 $ echo BB-BONE-PRU-04 > /sys/devices/bone\_capemgr.\*/slots 
 		 $ minicom -D /dev/vport0p0
 
 		 PRU#0> ?
