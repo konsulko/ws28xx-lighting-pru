@@ -66,8 +66,6 @@ static struct pt pt_tx;
 
 static u32 *SHARED_MEM = (u32 *) DPRAM_SHARED;
 
-static u8 current_universe = 0;
-
 #define RX_SIZE 32
 #define RX_SIZE_MASK (RX_SIZE - 1)
 #define TX_SIZE 64
@@ -125,10 +123,10 @@ static char tx_buf[TX_SIZE];
 	} while (0)
 
 
-
-static inline void blank_slots(void) {
+static inline void blank_slots(u8 universe)
+{
 	int i;
-	int offset = current_universe;
+	int offset = universe;
 
 	for (i = 0; i < MAX_SLOTS; i++) {
 		SHARED_MEM[offset] = 0;
@@ -136,11 +134,20 @@ static inline void blank_slots(void) {
 	}
 }
 
-static inline void write_data(u32 data, u8 slot_num) {
-	int offset = current_universe + (MAX_UNIVERSES * slot_num);
-
-	SHARED_MEM[offset] = data;
+static inline void write_data(u8 universe, u32 data, u8 slot_num)
+{
+	SHARED_MEM[universe + (MAX_UNIVERSES * slot_num)] = data;
 }
+
+
+static int handle_downcall(u32 id, u32 arg0, u32 arg1, u32 arg2,
+		u32 arg3, u32 arg4)
+{
+	/* TODO */
+
+	return 0;
+}
+
 
 static int event_thread(struct pt *pt)
 {
@@ -157,6 +164,16 @@ static int event_thread(struct pt *pt)
 		PT_WAIT_UNTIL(pt,
 			/* pru_signal() && */
 			(PINTC_SRSR0 & SYSEV_THIS_PRU_INCOMING_MASK) != 0);
+
+		/* downcall from the host */
+		if (PINTC_SRSR0 & BIT(SYSEV_ARM_TO_THIS_PRU)) {
+			PINTC_SICR = SYSEV_ARM_TO_THIS_PRU;
+
+			/* wait until the PWM_CMD is clear */
+			PT_WAIT_UNTIL(pt, PWM_CMD->magic == PWM_REPLY_MAGIC);
+
+			sc_downcall(handle_downcall);
+		}
 
 		if (PINTC_SRSR0 & BIT(SYSEV_VR_ARM_TO_THIS_PRU)) {
 			PINTC_SICR = SYSEV_VR_ARM_TO_THIS_PRU;
@@ -439,6 +456,7 @@ static int prompt_thread(struct pt *pt)
 	char buf[8];
 	char *p;
 	static int linesz;
+	static u8 current_universe;
 	u32 val;
 
 	PT_BEGIN(pt);
@@ -474,7 +492,7 @@ again:
 				current_universe = val;
 			}
 		} else if (ch1 == 'b') {
-			blank_slots();
+			blank_slots(current_universe);
 		} else if (ch1 == 'w') {
 			p = parse_u32(linebuf + 1, &val);
 
@@ -483,7 +501,7 @@ again:
 			} else {
 				u32 rgb_data;
 				p = parse_u24(p, &rgb_data);
-				write_data(rgb_data, val);
+				write_data(current_universe, rgb_data, val);
 			}
 		} else if (ch1 == 'l') {
 			/*
