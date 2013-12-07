@@ -66,6 +66,7 @@ static struct pt pt_tx;
  */ 
 
 static u32 *SHARED_MEM = (u32 *) DPRAM_SHARED;
+#define PRU_LED_DATA 0x1000
 
 #define RX_SIZE 32
 #define RX_SIZE_MASK (RX_SIZE - 1)
@@ -123,14 +124,6 @@ static char tx_buf[TX_SIZE];
 		(_ch) = tx_buf[tx_out++ & TX_SIZE_MASK]; \
 	} while (0)
 
-
-/* don't write when other PRU is accessing shared memory */
-#define OTHER_PRU_MEM_LOCK \
-	do { \
-		if (!(PINTC_SRSR0 & BIT(SYSEV_THIS_PRU_TO_OTHER_PRU))) \
-			break; \
-	} while (1)
-
 static inline void blank_slots(u8 universe)
 {
 	int i;
@@ -142,7 +135,7 @@ static inline void blank_slots(u8 universe)
 	}
 }
 
-static inline void write_data(u8 universe, u32 data, u8 slot_num)
+static inline void write_data(u8 universe, u8 slot_num, u32 data)
 {
 	SHARED_MEM[universe + (MAX_UNIVERSES * slot_num)] = data;
 }
@@ -151,8 +144,6 @@ static inline void write_data(u8 universe, u32 data, u8 slot_num)
 static int handle_downcall(u32 id, u32 arg0, u32 arg1, u32 arg2,
 		u32 arg3, u32 arg4)
 {
-	OTHER_PRU_MEM_LOCK;
-
 	switch (id) {
 		case DC_LED_BLANK:
 			blank_slots(arg0);
@@ -162,10 +153,15 @@ static int handle_downcall(u32 id, u32 arg0, u32 arg1, u32 arg2,
 			write_data(arg0, arg1, arg2);
 
 			break;
-		case DC_LED_WRITE_BURST:
-			/* TODO */
+		case DC_LED_WRITE_BURST: {
+			int i = 0;
+			u32 *data = (u32 *) PRU_LED_DATA;
 
+			for (i = 0; i < MAX_SLOTS; i++) {
+				write_data(arg0, i, *data++);
+			}
 			break;
+		}
 		case DC_LED_LATCH:
 			SIGNAL_EVENT(SYSEV_THIS_PRU_TO_OTHER_PRU);
 
@@ -175,6 +171,7 @@ static int handle_downcall(u32 id, u32 arg0, u32 arg1, u32 arg2,
 			/* error */
 			return -EINVAL;
 	}
+
 
 	return 0;
 }
@@ -200,9 +197,7 @@ static int event_thread(struct pt *pt)
 		if (PINTC_SRSR0 & BIT(SYSEV_ARM_TO_THIS_PRU)) {
 			PINTC_SICR = SYSEV_ARM_TO_THIS_PRU;
 
-			/* wait until the PWM_CMD is clear */
-			PT_WAIT_UNTIL(pt, PWM_CMD->magic == PWM_REPLY_MAGIC);
-
+			PT_WAIT_UNTIL(pt, !(PINTC_SRSR0 & BIT(SYSEV_THIS_PRU_TO_OTHER_PRU)));
 			sc_downcall(handle_downcall);
 		}
 
@@ -534,7 +529,7 @@ again:
 			} else {
 				u32 rgb_data;
 				p = parse_u24(p, &rgb_data);
-				write_data(current_universe, rgb_data, val);
+				write_data(current_universe, val, rgb_data);
 			}
 		} else if (ch1 == 'l') {
 			/*
