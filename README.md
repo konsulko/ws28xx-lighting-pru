@@ -6,17 +6,19 @@ WS2812 Datasheet: http://www.adafruit.com/datasheets/WS2812.pdf
 Universe Pin Mappings on Beagebone Black/White:
 
 * 0  -> P8\_45 (PRU1 R30\_0)
-* 1  -> P8\_46 (PRU1 R32\_1)
-* 2  -> P8\_43 (PRU1 R32\_2)
-* 3  -> P8\_44 (PRU1 R32\_3)
-* 4  -> P8\_41 (PRU1 R32\_4)
-* 5  -> P8\_42 (PRU1 R32\_5)
-* 6  -> P8\_39 (PRU1 R32\_6)
-* 7  -> P8\_40 (PRU1 R32\_7)
-* 8  -> P8\_27 (PRU1 R32\_8)
-* 9  -> P8\_29 (PRU1 R32\_9)
-* 10 -> P8\_28 (PRU1 R32\_10)
-* 11 -> P8\_30 (PRU1 R32\_11)
+* 1  -> P8\_46 (PRU1 R30\_1)
+* 2  -> P8\_43 (PRU1 R30\_2)
+* 3  -> P8\_44 (PRU1 R30\_3)
+* 4  -> P8\_41 (PRU1 R30\_4)
+* 5  -> P8\_42 (PRU1 R30\_5)
+* 6  -> P8\_39 (PRU1 R30\_6)
+* 7  -> P8\_40 (PRU1 R30\_7)
+* 8  -> P8\_27 (PRU1 R30\_8)
+* 9  -> P8\_29 (PRU1 R30\_9)
+* 10 -> P8\_28 (PRU1 R30\_10)
+* 11 -> P8\_30 (PRU1 R30\_11)
+- 12 -> P8\_21 (PRU1 R30\_12)
+- 13 -> P8\_20 (PRU1 R30\_13)
 
 
 Example usage:
@@ -26,8 +28,8 @@ Example usage:
 
 		 PRU#0> ?
 		 Help
-		  s <universe>              select universe 0-11
-		  b 	                    blanks slots 0-255
+		  s <universe>              select universe 0-13
+		  b 	                    blanks slots 0-169
 		  w <num> <v1>.<v2>.<v3>    write 24-bit GRB value to slot number
 		  l                         latch data out the PRU1
 
