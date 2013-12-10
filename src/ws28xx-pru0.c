@@ -505,9 +505,9 @@ again:
 		if (ch1 == '?') {
 			c_puts("Help\n"
 		 		" s <universe>              "
-				"select universe 0-11\n"
+				"select universe 0-13\n"
 		  		" b                         "
-				"blanks slots 0-255\n"
+				"blanks slots 0-169\n"
 		  		" w <num> <v1>.<v2>.<v3>    "
 				"write 24-bit GRB value to slot number\n"
 		  		" l                         "

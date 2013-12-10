@@ -15,7 +15,7 @@ main:
 
 	;* assure we have blank shared memory
 	.asg R2,    OFFSET_REG
-	.asg R18,   DATA_REGS
+	.asg R16,   DATA_REGS
 
 	LDI32 R0, CONST_SHARED_MEM
 	LDI UNIVERSE_COUNT, 0 ; universe counter
@@ -55,7 +55,7 @@ $M5:
 	LDI SLOT_COUNT, 0     ; slot counter
 	LDI32 OFFSET_REG, CONST_SHARED_MEM
 $M6:
-	; use 12 registers, one for each universe
+	; use 14 registers, one for each universe
 	LBBO &DATA_REGS, OFFSET_REG, 0, 4 * MAX_UNIVERSES
 
 	LDI BIT_COUNT, 0      ; bit counter
