@@ -33,10 +33,11 @@ Example usage *(low speed virtio serial usage)*:
 		 Help
 		  s <universe>              select universe 0-13
 		  b 	                    blanks slots 0-169
+		  m <val>                   max number of slots per universe 0-169
 		  w <num> <v1>.<v2>.<v3>    write 24-bit GRB value to slot number
 		  l                         latch data out the PRU1
 
-		 PRU#0> s 0
+		 PRU#0> m 30
 		 PRU#0> b
 		 PRU#0> w 0 ff.00.00
 		 PRU#0> w 1 00.ff.00
@@ -57,7 +58,8 @@ Examples usage *(HIGH speed ioctl/spidev usage)*:
 		$ cat /proc/misc | grep pru_leds
 		 59 pru_leds
 		$ mknod /dev/pruleds0.0 c 10 59
-		
+		$ echo "m 30" > /dev/pruleds0.0
+
 		** Install OLA and use the examples/spidev-pru.conf **
 
 
@@ -66,6 +68,7 @@ Important Notes:
 * Disable HDMI out on BeagleBone Black to free up PRU pins
  * "optargs=capemgr.disable\_partno=BB-BONELT-HDMI,BB-BONELT-HDMIN" in /boot/uEnv.txt
 * Blanking only has to be called once per universe unless you are changing slot count
+* Disabling unused slots will increase FPS and reduce the data written
 * After latching data updating values is locked till the transaction completes
  * To avoid double buffering we have to be sure all data is written
  * Accessing the same PRU shared memory will stall one or both PRUs
