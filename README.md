@@ -17,11 +17,14 @@ Universe Pin Mappings on Beagebone Black/White:
 * 9  -> P8\_29 (PRU1 R30\_9)
 * 10 -> P8\_28 (PRU1 R30\_10)
 * 11 -> P8\_30 (PRU1 R30\_11)
-- 12 -> P8\_21 (PRU1 R30\_12)
-- 13 -> P8\_20 (PRU1 R30\_13)
+
+*black sheep bits - disabled in overlay by default to allow eMMC usage*
+
+* 12 -> P8\_21 (PRU1 R30\_12)
+* 13 -> P8\_20 (PRU1 R30\_13)
 
 
-Example usage:
+Example usage *(low speed virtio serial usage)*:
 
 		 $ echo BB-BONE-PRU-04 > /sys/devices/bone\_capemgr.\*/slots 
 		 $ minicom -D /dev/vport0p0
@@ -48,6 +51,15 @@ Example usage:
 		 PRU#1> l
 
 	         ** Blinky Lights! **
+
+Examples usage *(HIGH speed ioctl/spidev usage)*:
+
+		$ cat /proc/misc | grep pru_leds
+		 59 pru_leds
+		$ mknod c 59 0 /dev/pruleds0.0
+		
+		** Install OLA and use the examples/spidev-pru.conf **
+
 
 Important Notes:
 
