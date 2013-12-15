@@ -26,7 +26,7 @@ Universe Pin Mappings on Beagebone Black/White:
 
 Example usage *(low speed virtio serial usage)*:
 
-		 $ echo BB-BONE-PRU-04 > /sys/devices/bone\_capemgr.\*/slots 
+		 $ echo BB-BONE-PRU-05 > /sys/devices/bone\_capemgr.\*/slots 
 		 $ minicom -D /dev/vport0p0
 
 		 PRU#0> ?
@@ -63,6 +63,8 @@ Examples usage *(HIGH speed ioctl/spidev usage)*:
 
 Important Notes:
 
+* Disable HDMI out on BeagleBone Black to free up PRU pins
+ * "optargs=capemgr.disable\_partno=BB-BONELT-HDMI,BB-BONELT-HDMIN" in /boot/uEnv.txt
 * Blanking only has to be called once per universe unless you are changing slot count
 * After latching data updating values is locked till the transaction completes
  * To avoid double buffering we have to be sure all data is written
