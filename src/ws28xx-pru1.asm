@@ -35,9 +35,15 @@ $M2:
 	ADD UNIVERSE_COUNT, UNIVERSE_COUNT, 1
 	QBNE $M1, UNIVERSE_COUNT, MAX_UNIVERSES
 
+
+	;* default to max slots to 170
+	LDI32 OFFSET_REG, CONST_MAX_SLOTS
+	LDI MAX_SLOTS, 170
+	SBBO &MAX_SLOTS, OFFSET_REG, 0, 1
+
 	;* Blank the LED strips now
 	JMP $M5
-	
+
 	;* Latch Data Out
 	;*
 $M3:
@@ -47,10 +53,12 @@ $M3:
 	SBCO &R4, CONST_PRUSSINTC, SICR_OFFSET, 4 
 
 	LATCH_DATA
-
 $M4:
 	;* Spin till we get an update interrupt from PRU0	
 	QBBC $M4, R31, 31
+
+	LDI32 OFFSET_REG, CONST_MAX_SLOTS
+	LBBO &MAX_SLOTS, OFFSET_REG, 0, 1
 $M5:	
 	LDI SLOT_COUNT, 0     ; slot counter
 	LDI32 OFFSET_REG, CONST_SHARED_MEM

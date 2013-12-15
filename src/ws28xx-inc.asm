@@ -15,12 +15,13 @@
 	.asg 17, PRU0_PRU1_INTERRUPT
 	.asg 18, PRU1_PRU0_INTERRUPT
 
-	.asg 170, MAX_SLOTS
+	.asg CONST_SHARED_MEM + 0x2FC0, CONST_MAX_SLOTS
 	.asg 14,  MAX_UNIVERSES
 
 	.asg R1.b0, UNIVERSE_COUNT
 	.asg R1.b1, SLOT_COUNT
 	.asg R1.b2, BIT_COUNT
+	.asg R1.b3, MAX_SLOTS
 
 	;*
 	;* Spin around and kill time. 5 nanoseconds per cycle.

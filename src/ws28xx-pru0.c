@@ -144,6 +144,8 @@ static inline void write_data(u8 universe, u8 slot_num, u32 data)
 static int handle_downcall(u32 id, u32 arg0, u32 arg1, u32 arg2,
 		u32 arg3, u32 arg4)
 {
+	int max_slots = SHARED_MEM[CONFIG_MAX_SLOTS];
+
 	switch (id) {
 		case DC_LED_BLANK:
 			blank_slots(arg0);
@@ -157,7 +159,7 @@ static int handle_downcall(u32 id, u32 arg0, u32 arg1, u32 arg2,
 			int i = 0;
 			u32 *data = (u32 *) PRU_LED_DATA;
 
-			for (i = 0; i < MAX_SLOTS; i++) {
+			for (i = 0; i < max_slots; i++) {
 				write_data(arg0, i, *data++);
 			}
 			break;
@@ -172,6 +174,8 @@ static int handle_downcall(u32 id, u32 arg0, u32 arg1, u32 arg2,
 			return -EINVAL;
 	}
 
+	/* Allow kernel binding to know of slot count  */
+	*((u32 *) PRU_LED_DATA) = max_slots;
 
 	return 0;
 }
@@ -508,6 +512,8 @@ again:
 				"select universe 0-13\n"
 		  		" b                         "
 				"blanks slots 0-169\n"
+				" m <val>                   "
+				"max number of slots per universe 0-169\n"
 		  		" w <num> <v1>.<v2>.<v3>    "
 				"write 24-bit GRB value to slot number\n"
 		  		" l                         "
@@ -521,6 +527,14 @@ again:
 			}
 		} else if (ch1 == 'b') {
 			blank_slots(current_universe);
+		} else if (ch1 == 'm') {
+			p = parse_u32(linebuf + 1, &val);
+			
+			if (val > MAX_SLOTS) {
+				pp = "*BAD\n";
+			} else {
+				SHARED_MEM[CONFIG_MAX_SLOTS] = val + 1;
+			}
 		} else if (ch1 == 'w') {
 			p = parse_u32(linebuf + 1, &val);
 
@@ -648,7 +662,6 @@ int main(int argc, char *argv[])
 {
 	/* enable OCP master port */
 	PRUCFG_SYSCFG &= ~SYSCFG_STANDBY_INIT;
-
 	sc_printf("PRU0: Starting Lighting Firmware");
 
 	PT_INIT(&pt_event);
