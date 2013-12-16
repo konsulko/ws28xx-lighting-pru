@@ -32,7 +32,7 @@ Example usage *(low speed virtio serial usage)*:
 		 PRU#0> ?
 		 Help
 		  s <universe>              select universe 0-13
-		  b 	                    blanks slots 0-169
+		  b 	                    blanks slots 1-170
 		  m <val>                   max number of slots per universe 0-169
 		  w <num> <v1>.<v2>.<v3>    write 24-bit GRB value to slot number
 		  l                         latch data out the PRU1

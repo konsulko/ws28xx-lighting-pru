@@ -511,7 +511,7 @@ again:
 		 		" s <universe>              "
 				"select universe 0-13\n"
 		  		" b                         "
-				"blanks slots 0-169\n"
+				"blanks slots 1-170\n"
 				" m <val>                   "
 				"max number of slots per universe 0-169\n"
 		  		" w <num> <v1>.<v2>.<v3>    "
@@ -530,10 +530,11 @@ again:
 		} else if (ch1 == 'm') {
 			p = parse_u32(linebuf + 1, &val);
 			
-			if (val > MAX_SLOTS) {
+			if (val > MAX_SLOTS || val == 0) {
 				pp = "*BAD\n";
 			} else {
-				SHARED_MEM[CONFIG_MAX_SLOTS] = val + 1;
+				SHARED_MEM[CONFIG_MAX_SLOTS] = val;
+				*((u32 *) PRU_LED_DATA) = val;
 			}
 		} else if (ch1 == 'w') {
 			p = parse_u32(linebuf + 1, &val);
