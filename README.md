@@ -1,5 +1,8 @@
-AM335x remoteproc firmware with command interface
-=================================================
+PRUDINO
+=======
+
+AM335x remoteproc PRU firmware with command interface for
+BeagleBone and BeagleBone Black.
 
 This project is meant to provide a single firmware
 load for the BeagleBone Black PRUs such that these
