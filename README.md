@@ -1,10 +1,55 @@
 AM335x remoteproc firmware with command interface
 =================================================
 
+This project is meant to provide a single firmware
+load for the BeagleBone Black PRUs such that these
+processors can be used from node.js or other high-level 
+languages without needing to program them directly.
+
+Interfaces are provided for LED arrays, servo and
+stepper motors, GPIOs, buttons, simple LCDs
+
+# status
+
+Concept only, not yet implemented.
+
+# history
+
+The work is derived from code from Matt Ranostay to
+use the PRUs to drive WS2812 LEDs. Additional interfaces
+are defined by code from Cam Pedersen that targets
+Arduino boards.
+
+* https://github.com/mranostay/ws28xx-lighting-pru
+* https://github.com/ecto/duino
+
+# install
+
+Typical usage will be in BoneScript(http://github.com/jadonk/bonescript), but
+it can also be used stand-alone.
+
+    npm install pruduino
+
+# usage
+
+Typical usage will be in BoneScript(http://github.com/jadonk/bonescript), but
+it can also be used stand-alone.
+
+````javascript
+var pruduino = require('pruduino'),
+    board = new pruduino.Board();
+
+var led = new pruduino.Led({
+  board: board,
+  pin: 13
+});
+
+led.blink();
+````
+
+
 WS2812 interface
 ----------------
-
-From https://github.com/mranostay/ws28xx-lighting-pru
 
 WS2812 Datasheet: http://www.adafruit.com/datasheets/WS2812.pdf
 
@@ -82,29 +127,6 @@ Important Notes:
 duino interface
 ----------------
 
-From https://github.com/ecto/duino
-
-A framework for working with Arduinos in node.js
-
-![arduino](http://i.imgur.com/eFq84.jpg)
-
-# install
-
-    npm install duino
-
-# usage
-
-````javascript
-var arduino = require('duino'),
-    board = new arduino.Board();
-
-var led = new arduino.Led({
-  board: board,
-  pin: 13
-});
-
-led.blink();
-````
 
 # what ಠ_ಠ
 
@@ -398,7 +420,9 @@ Pins can be sent as an integer or a string(`1`, `2`, `"3"`, `"A0"`)
 # license
 
 Copyright (c) 2011 Cam Pedersen <cam@onswipe.com>
+
 Copyright (c) 2013 Matt Ranostay
+
 Copyright (c) 2013 Jason Kridner, Texas Instruments, Inc.
 
 See COPYING
