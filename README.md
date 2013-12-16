@@ -7,7 +7,7 @@ processors can be used from node.js or other high-level
 languages without needing to program them directly.
 
 Interfaces are provided for LED arrays, servo and
-stepper motors, GPIOs, buttons, simple LCDs
+stepper motors, GPIOs, buttons, simple LCDs and more.
 
 # status
 
@@ -16,9 +16,13 @@ Concept only, not yet implemented.
 # history
 
 The work is derived from code from Matt Ranostay to
-use the PRUs to drive WS2812 LEDs. Additional interfaces
-are defined by code from Cam Pedersen that targets
-Arduino boards.
+use the PRUs to drive WS2812 LEDs under the Open Lighting
+Architecture. Additional interfaces are defined by code
+from Cam Pedersen that targets Arduino boards. I believe
+Matt has the best PRU interface code and Cam has the best
+set of interfaces for using a microcontroller flexibly
+under node.js, so that's why I started with these
+projects.
 
 * https://github.com/mranostay/ws28xx-lighting-pru
 * https://github.com/ecto/duino
@@ -28,6 +32,8 @@ Arduino boards.
 Typical usage will be in BoneScript(http://github.com/jadonk/bonescript), but
 it can also be used stand-alone.
 
+PRU C compiler must be installed as a prerequisite.
+
     npm install pruduino
 
 # usage
@@ -36,24 +42,18 @@ Typical usage will be in BoneScript(http://github.com/jadonk/bonescript), but
 it can also be used stand-alone.
 
 ````javascript
-var pruduino = require('pruduino'),
-    board = new pruduino.Board();
+var pruduino = require('pruduino');
 
 var led = new pruduino.Led({
-  board: board,
   pin: 13
 });
 
 led.blink();
 ````
 
+# pin mappings
 
-WS2812 interface
-----------------
-
-WS2812 Datasheet: http://www.adafruit.com/datasheets/WS2812.pdf
-
-Universe Pin Mappings on Beagebone Black/White:
+Pin Mappings on Beagebone Black/White:
 
 * 0  -> P8\_45 (PRU1 R30\_0)
 * 1  -> P8\_46 (PRU1 R30\_1)
@@ -67,17 +67,24 @@ Universe Pin Mappings on Beagebone Black/White:
 * 9  -> P8\_29 (PRU1 R30\_9)
 * 10 -> P8\_28 (PRU1 R30\_10)
 * 11 -> P8\_30 (PRU1 R30\_11)
+* 12 -> USR2 LED
+* 13 -> USR3 LED
 
-*black sheep bits - disabled in overlay by default to allow eMMC usage*
+# low-level command interface usage
 
-* 12 -> P8\_21 (PRU1 R30\_12)
-* 13 -> P8\_20 (PRU1 R30\_13)
+It is also possible to use the firmware directly from the Linux
+command-line.
 
-
-Example usage *(low speed virtio serial usage)*:
-
-		 $ echo BB-BONE-PRU-05 > /sys/devices/bone\_capemgr.\*/slots 
+		 $ cp BB-PRUDUINO-00A0.dtbo /lib/firmware
+		 $ echo BB-PRUDUINO > /sys/devices/bone\_capemgr.\*/slots 
 		 $ minicom -D /dev/vport0p0
+
+# additional low-level interfaces
+
+WS2812 interface
+----------------
+
+WS2812 Datasheet: http://www.adafruit.com/datasheets/WS2812.pdf
 
 		 PRU#0> ?
 		 Help
