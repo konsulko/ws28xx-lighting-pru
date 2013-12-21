@@ -18,12 +18,6 @@ Universe Pin Mappings on Beagebone Black/White:
 * 10 -> P8\_28 (PRU1 R30\_10)
 * 11 -> P8\_30 (PRU1 R30\_11)
 
-*black sheep bits - disabled in overlay by default to allow eMMC usage*
-
-* 12 -> P8\_21 (PRU1 R30\_12)
-* 13 -> P8\_20 (PRU1 R30\_13)
-
-
 Example usage *(low speed virtio serial usage)*:
 
 		 $ echo BB-BONE-PRU-05 > /sys/devices/bone\_capemgr.\*/slots 
@@ -31,9 +25,9 @@ Example usage *(low speed virtio serial usage)*:
 
 		 PRU#0> ?
 		 Help
-		  s <universe>              select universe 0-13
-		  b 	                    blanks slots 1-170
-		  m <val>                   max number of slots per universe 0-169
+		  s <universe>              select universe 0-11
+		  b 	                    blanks slots 0-255
+		  m <val>                   max number of slots per universe 0-255
 		  w <num> <v1>.<v2>.<v3>    write 24-bit GRB value to slot number
 		  l                         latch data out the PRU1
 

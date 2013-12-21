@@ -67,6 +67,7 @@ static struct pt pt_tx;
 
 static u32 *SHARED_MEM = (u32 *) DPRAM_SHARED;
 #define PRU_LED_DATA 0x1000
+#define PRU_CONFIG_DATA 0x0800
 
 #define RX_SIZE 32
 #define RX_SIZE_MASK (RX_SIZE - 1)
@@ -144,8 +145,6 @@ static inline void write_data(u8 universe, u8 slot_num, u32 data)
 static int handle_downcall(u32 id, u32 arg0, u32 arg1, u32 arg2,
 		u32 arg3, u32 arg4)
 {
-	int max_slots = SHARED_MEM[CONFIG_MAX_SLOTS];
-
 	switch (id) {
 		case DC_LED_BLANK:
 			blank_slots(arg0);
@@ -157,9 +156,10 @@ static int handle_downcall(u32 id, u32 arg0, u32 arg1, u32 arg2,
 			break;
 		case DC_LED_WRITE_BURST: {
 			int i = 0;
+			int max_slots = *((u32 *) PRU_CONFIG_DATA) & 0xFF;
 			u32 *data = (u32 *) PRU_LED_DATA;
 
-			for (i = 0; i < max_slots; i++) {
+			for (i = 0; i < max_slots + 1; i++) {
 				write_data(arg0, i, *data++);
 			}
 			break;
@@ -173,9 +173,6 @@ static int handle_downcall(u32 id, u32 arg0, u32 arg1, u32 arg2,
 			/* error */
 			return -EINVAL;
 	}
-
-	/* Allow kernel binding to know of slot count  */
-	*((u32 *) PRU_LED_DATA) = max_slots;
 
 	return 0;
 }
@@ -509,11 +506,11 @@ again:
 		if (ch1 == '?') {
 			c_puts("Help\n"
 		 		" s <universe>              "
-				"select universe 0-13\n"
+				"select universe 0-11\n"
 		  		" b                         "
-				"blanks slots 1-170\n"
+				"blanks slots 0-255\n"
 				" m <val>                   "
-				"max number of slots per universe 0-169\n"
+				"max number of slots per universe 0-255\n"
 		  		" w <num> <v1>.<v2>.<v3>    "
 				"write 24-bit GRB value to slot number\n"
 		  		" l                         "
@@ -533,8 +530,7 @@ again:
 			if (val > MAX_SLOTS || val == 0) {
 				pp = "*BAD\n";
 			} else {
-				SHARED_MEM[CONFIG_MAX_SLOTS] = val;
-				*((u32 *) PRU_LED_DATA) = val;
+				*((u32 *) PRU_CONFIG_DATA) = val;
 			}
 		} else if (ch1 == 'w') {
 			p = parse_u32(linebuf + 1, &val);

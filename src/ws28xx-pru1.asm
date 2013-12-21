@@ -1,4 +1,3 @@
-;*
 ;* PRU1 Application
 ;*
 
@@ -21,53 +20,59 @@ main:
 	LDI UNIVERSE_COUNT, 0 ; universe counter
 $M1:
 	LDI SLOT_COUNT, 0     ; slot counter
+	JMP $M3
 $M2:
+	ADD SLOT_COUNT, SLOT_COUNT, 1
+$M3:
 	;* zero memory
 	LDI32 R2, 0
 	SBBO &R2, R0, 0, 4
 
 	;* next slot
-	ADD SLOT_COUNT, SLOT_COUNT, 1
 	ADD R0, R0, 4
 	QBNE $M2, SLOT_COUNT, MAX_SLOTS
 
 	;* next universe
 	ADD UNIVERSE_COUNT, UNIVERSE_COUNT, 1
-	QBNE $M1, UNIVERSE_COUNT, MAX_UNIVERSES
+	QBNE $M2, UNIVERSE_COUNT, MAX_UNIVERSES
 
-
-	;* default to max slots to 170
+	;* default to max slots to 255
 	LDI32 OFFSET_REG, CONST_MAX_SLOTS
-	LDI MAX_SLOTS, 170
+	LDI MAX_SLOTS, 255
 	SBBO &MAX_SLOTS, OFFSET_REG, 0, 1
 
 	;* Blank the LED strips now
-	JMP $M5
+	JMP $M6
 
 	;* Latch Data Out
 	;*
-$M3:
+$M4:
 	;* Clear interrupt
 	LDI R4.w2, 0
 	LDI R4.w0, PRU0_PRU1_INTERRUPT 
 	SBCO &R4, CONST_PRUSSINTC, SICR_OFFSET, 4 
 
 	LATCH_DATA
-$M4:
+$M5:
 	;* Spin till we get an update interrupt from PRU0	
-	QBBC $M4, R31, 31
+	QBBC $M5, R31, 31
 
 	LDI32 OFFSET_REG, CONST_MAX_SLOTS
 	LBBO &MAX_SLOTS, OFFSET_REG, 0, 1
-$M5:	
+$M6:	
 	LDI SLOT_COUNT, 0     ; slot counter
 	LDI32 OFFSET_REG, CONST_SHARED_MEM
-$M6:
+
+	; be sure we do a zero count
+	JMP $M8
+$M7:
+	ADD SLOT_COUNT, SLOT_COUNT, 1
+$M8:
 	; use 14 registers, one for each universe
 	LBBO &DATA_REGS, OFFSET_REG, 0, 4 * MAX_UNIVERSES
 
 	LDI BIT_COUNT, 0      ; bit counter
-$M7:
+$M9:
 	;* Logic Low  -> high 0.40 uS -> low 0.85 uS (1.25 uS)
 	;* Logic High -> high 0.80 uS -> low 0.45 uS (1.25 uS)
 	;*
@@ -89,11 +94,10 @@ $M7:
 	DELAY_CYCLES 90 ; delay 0.45 uS
 
 	ADD BIT_COUNT, BIT_COUNT, 1
-	QBNE $M7, BIT_COUNT, 24
+	QBNE $M9, BIT_COUNT, 24
 
 	;* next slot
-	ADD SLOT_COUNT, SLOT_COUNT, 1
 	ADD OFFSET_REG, OFFSET_REG, 4 * MAX_UNIVERSES
-	QBNE $M6, SLOT_COUNT, MAX_SLOTS
+	QBNE $M7, SLOT_COUNT, MAX_SLOTS
 
-	JMP $M3
+	JMP $M4

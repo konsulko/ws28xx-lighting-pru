@@ -5,9 +5,7 @@
  * Various defines
  */
 
-#define MAX_UNIVERSES	14
-#define MAX_SLOTS	170
-
-#define CONFIG_MAX_SLOTS 0xbf0
+#define MAX_UNIVERSES	12
+#define MAX_SLOTS	256
 
 #endif /* _WS28XX_H */
