@@ -18,7 +18,7 @@ Universe Pin Mappings on Beagebone Black/White:
 * 10 -> P8\_28 (PRU1 R30\_10)
 * 11 -> P8\_30 (PRU1 R30\_11)
 
-"Benchmarks" on frames per second using spidev
+"Benchmarks" on frames per second using spidev universe count and at 256 slots
 
 * 1 -> 127 FPS
 * ...
