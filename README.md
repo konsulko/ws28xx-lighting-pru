@@ -23,6 +23,8 @@ Universe Pin Mappings on Beagebone Black/White:
 * 1 -> 127 FPS
 * ...
 * 10 -> 100 FPS
+* ...
+* 12 -> 96 FPS
 
 Example usage *(low speed virtio serial usage)*:
 
