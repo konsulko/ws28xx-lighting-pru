@@ -1,0 +1,1 @@
+KERNEL=="pru_leds", OWNER="ola", MODE="0660", SYMLINK += "spidev0.0"
