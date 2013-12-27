@@ -28,6 +28,8 @@ Universe Pin Mappings on Beagebone Black/White:
 
 Example usage *(low speed virtio serial usage)*:
 
+		 $ cp ws28xx-pru1-ws281x /lib/firmware/ws28xx-pru1
+		 $ cp ws28xx-pru0 /lib/firmware/ws28xx-pru0
 		 $ echo BB-BONE-PRU-05 > /sys/devices/bone\_capemgr.\*/slots 
 		 $ minicom -D /dev/vport0p0
 
