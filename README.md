@@ -16,9 +16,9 @@ Universe Pin Mappings on Beagebone Black/White:
 * 8  -> P8\_27 (PRU1 R30\_8)
 * 9  -> P8\_29 (PRU1 R30\_9)
 * 10 -> P8\_28 (PRU1 R30\_10)
-* 11 -> P8\_30 (PRU1 R30\_11)
+* 11 -> P8\_30 (PRU1 R30\_11) *(clock line for WS2801)*
 
-"Benchmarks" on frames per second using spidev universe count and at 256 slots
+"Benchmarks" using WS281x chipset on frames per second using spidev universe count and at 256 slots
 
 * 1 -> 127 FPS
 * ...
