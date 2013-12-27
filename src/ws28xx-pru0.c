@@ -506,7 +506,9 @@ again:
 		if (ch1 == '?') {
 			c_puts("Help\n"
 		 		" s <universe>              "
-				"select universe 0-11\n"
+				"select universe number\n"
+				"      ws2801 (firmware) -> 0-10\n"
+				"      ws281x (firmware) -> 0-11\n"
 		  		" b                         "
 				"blanks slots 0-255\n"
 				" m <val>                   "

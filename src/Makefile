@@ -5,7 +5,9 @@
 
 .PHONY: all clean
 
-all: ws28xx-pru0.stripped ws28xx-pru0.lst ws28xx-pru1-ws281x.stripped ws28xx-pru1-ws281x.lst
+all: ws28xx-pru0.stripped ws28xx-pru0.lst \
+	ws28xx-pru1-ws281x.stripped ws28xx-pru1-ws281x.lst \
+	ws28xx-pru1-ws2801.stripped ws28xx-pru1-ws2801.lst
 
 CC=clpru
 LD=lnkpru
@@ -32,6 +34,7 @@ STRIPFLAGS=-p
 
 OBJS0:=ws28xx-pru0.obj syscall0.obj debug.obj pru_vring.obj
 OBJS1:=ws28xx-pru1-ws281x.obj ws28xx-inc.obj
+OBJS2:=ws28xx-pru1-ws2801.obj ws28xx-inc.obj
 
 %.obj: %.c
 	$(CC) $(CFLAGS) -c $<
@@ -45,10 +48,16 @@ ws28xx-pru0: $(OBJS0)
 ws28xx-pru1-ws281x: $(OBJS1)
 	$(CC) $(CFLAGS) $^ -z $(LDFLAGS) -o $@
 
+ws28xx-pru1-ws2801: $(OBJS2)
+	$(CC) $(CFLAGS) $^ -z $(LDFLAGS) -o $@
+
 ws28xx-pru0.stripped: ws28xx-pru0
 	$(STRIP) $(STRIPFLAGS) $< -o $@
 
 ws28xx-pru1-ws281x.stripped: ws28xx-pru1-ws281x
+	$(STRIP) $(STRIPFLAGS) $< -o $@
+
+ws28xx-pru1-ws2801.stripped: ws28xx-pru1-ws2801
 	$(STRIP) $(STRIPFLAGS) $< -o $@
 
 ws28xx-pru0.lst: ws28xx-pru0
@@ -57,9 +66,11 @@ ws28xx-pru0.lst: ws28xx-pru0
 ws28xx-pru1-ws281x.lst: ws28xx-pru1-ws281x
 	$(OBJDUMP) -1 $< > $@
 
+ws28xx-pru1-ws2801.lst: ws28xx-pru1-ws2801
+	$(OBJDUMP) -1 $< > $@
 clean:
 	rm -f *.obj *.lst *.out *.stripped \
-	ws28xx-pru0 ws28xx-pru1-ws281x tags
+	ws28xx-pru0 ws28xx-pru1-ws281x ws28xx-pru1-ws2801 tags
 
 distclean: clean
 	rm -f *.pp

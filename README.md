@@ -36,6 +36,8 @@ Example usage *(low speed virtio serial usage)*:
 		 PRU#0> ?
 		 Help
 		  s <universe>              select universe 0-11
+		       ws2801 (firmware) -> 0-10
+		       ws281x (firmware) -> 0-11
 		  b 	                    blanks slots 0-255
 		  m <val>                   max number of slots per universe 0-255
 		  w <num> <v1>.<v2>.<v3>    write 24-bit GRB value to slot number
