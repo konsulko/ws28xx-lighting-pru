@@ -1,4 +1,4 @@
-AM335x remoteproc firmware for driving WS281x RGB LEDS
+AM335x remoteproc firmware for driving WS28xx RGB LEDS
 =======================================================
 
 WS2812 Datasheet: http://www.adafruit.com/datasheets/WS2812.pdf
