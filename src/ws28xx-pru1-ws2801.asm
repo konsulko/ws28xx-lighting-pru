@@ -65,6 +65,7 @@ $M4:
 	LATCH_DATA
 	LATCH_DATA
 	LATCH_DATA
+
 $M5:
 	;* Spin till we get an update interrupt from PRU0	
 	QBBC $M5, R31, 31
@@ -89,11 +90,11 @@ $M9:
 	ASSEMBLE_DATA
 	CLR R14.w0, R14.w0, 11
 	MOV R30.w0, R14.w0
+
 	DELAY_CYCLES 70 ; delay 0.40 uS - 10 clocks
 
-	SET R14.w0, R14.w0, 11
-	MOV R30.w0, R14.w0
-	DELAY_CYCLES 53 ; delay 0.40 uS - 27 clocks
+	SET R30.w0, R30.w0, 11
+	DELAY_CYCLES 63 ; delay 0.40 uS - 17 clocks
 
 	;* shift everything right
 	SHIFT_DATA

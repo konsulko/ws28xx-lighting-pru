@@ -57,7 +57,6 @@ ASSEMBLE_DATA	.macro
 	;* R14 has the assembled value to pipe out R30
 	LDI R14, 0
 
-
 	QBBC $1, R16, 23
 	SET R14, R14, 0
 $1:
@@ -111,7 +110,7 @@ SHIFT_DATA	.macro
 	LSL R22, R22, 1
 	LSL R23, R23, 1
 	
-	;* second 6 bits
+	;* second 4 bits
 	LSL R24, R24, 1
 	LSL R25, R25, 1
 	LSL R26, R26, 1
