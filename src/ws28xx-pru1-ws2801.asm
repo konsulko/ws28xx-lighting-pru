@@ -98,6 +98,7 @@ $M9:
 
 	SET R30.w0, R30.w0, 11
 	DELAY_CYCLES 53 ; delay 0.40 uS - 17 clocks
+	CLR R30.w0, R30.w0, 11
 
 	ADD BIT_COUNT, BIT_COUNT, 1
 	QBNE $M9, BIT_COUNT, 24
