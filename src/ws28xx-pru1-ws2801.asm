@@ -93,11 +93,11 @@ $M9:
 
 	DELAY_CYCLES 70 ; delay 0.40 uS - 10 clocks
 
-	SET R30.w0, R30.w0, 11
-	DELAY_CYCLES 63 ; delay 0.40 uS - 17 clocks
-
 	;* shift everything right
 	SHIFT_DATA
+
+	SET R30.w0, R30.w0, 11
+	DELAY_CYCLES 53 ; delay 0.40 uS - 17 clocks
 
 	ADD BIT_COUNT, BIT_COUNT, 1
 	QBNE $M9, BIT_COUNT, 24
