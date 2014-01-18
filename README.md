@@ -2,6 +2,8 @@ AM335x remoteproc firmware for driving WS28xx RGB LEDS
 =======================================================
 
 WS2812 Datasheet: http://www.adafruit.com/datasheets/WS2812.pdf
+WS2801 Datasheet: http://www.adafruit.com/datasheets/WS2801.pdf
+Koen's Evil Vendor Kernel: https://github.com/beagleboard/kernel/tree/3.8
 
 Universe Pin Mappings on Beagebone Black/White:
 
@@ -27,6 +29,8 @@ Universe Pin Mappings on Beagebone Black/White:
 * 12 -> 96 FPS
 
 Example usage *(low speed virtio serial usage)*:
+
+*NOTE: Virtio serial doesn't support termios so no flow control, and you'll need a hacked up minicom*
 
 		 $ cp ws28xx-pru1-ws281x /lib/firmware/ws28xx-pru1
 		 $ cp ws28xx-pru0 /lib/firmware/ws28xx-pru0
