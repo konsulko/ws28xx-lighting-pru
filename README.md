@@ -2,7 +2,9 @@ AM335x remoteproc firmware for driving WS28xx RGB LEDS
 =======================================================
 
 WS2812 Datasheet: http://www.adafruit.com/datasheets/WS2812.pdf
+
 WS2801 Datasheet: http://www.adafruit.com/datasheets/WS2801.pdf
+
 Koen's Evil Vendor Kernel: https://github.com/beagleboard/kernel/tree/3.8
 
 Universe Pin Mappings on Beagebone Black/White:
