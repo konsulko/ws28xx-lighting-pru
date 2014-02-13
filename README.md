@@ -21,14 +21,17 @@ Concept only, not yet implemented.
 The work is derived from code from Matt Ranostay to
 use the PRUs to drive WS2812 LEDs under the Open Lighting
 Architecture. Additional interfaces are defined by code
-from Cam Pedersen that targets Arduino boards. I believe
-Matt has the best PRU interface code and Cam has the best
+from Cam Pedersen that targets Arduino boards and Chris
+Roger's BotSpeak interpreter for physical computing. I believe
+Matt has the best PRU interface code, Cam has the best
 set of interfaces for using a microcontroller flexibly
-under node.js, so that's why I started with these
+under node.js and Chris has the simpest interpreter structure
+to provide flexiblity, so that's why I started with these
 projects.
 
 * https://github.com/mranostay/ws28xx-lighting-pru
 * https://github.com/ecto/duino
+* https://sites.google.com/site/botspeak/home
 
 # install
 
