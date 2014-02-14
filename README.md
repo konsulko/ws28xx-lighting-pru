@@ -85,6 +85,92 @@ command-line.
 		 $ echo BB-PRUDUINO > /sys/devices/bone\_capemgr.\*/slots 
 		 $ minicom -D /dev/vport0p0
 
+# design
+
+This is rough pseudo-code to explain the design concept.
+
+```C
+int script_is_running = 0;
+int missed_realtime = 0;
+
+main() {
+	while(;;) {
+		test_for_flags();
+		if(script_is_running) {
+			preprocess_next_command();
+			test_for_realtime();
+		}
+	}
+}
+
+test_for_flags() {
+	int flags = read_flags();
+
+	if(script_is_running && (flags & HAVE_SCRIPT_TIMER)) {
+		execute_next_command();
+	}
+	if(flags & HAVE_TIMER_EVENT) {
+		process_timer_event();
+	}
+	if(flags & HAVE_MESSAGE) {
+		process_message();
+	}
+}
+
+test_for_realtime() {
+	int flags = read_flags();
+	
+	// We should have time to get back into the loop
+	// before the timer has done off
+	if(flags & HAVE_SCRIPT_TIMER) {
+		missed_realtime = 1;
+	}
+}
+```
+
+This means that commands will only be executed upon timer events to keep the timing
+consistent.  Between executing commands, messages can come in for immediate execution,
+so less than 50% of the inner loop can be spent on executing a command to allow for
+consistent timing. However, I can imagine that non-IO commands could be executed in a
+more-than-one-per-cycle manner, but that'll probably come in a later implementation.
+
+# script commands
+
+* SETMODE
+* SERVO
+* SET (=)
+* GET (g)
+* ADD (+)
+* SUB (-)
+* MUL (*)
+* DIV (/)
+* MOD (%)
+* AND (&)
+* OR (|)
+* BSL (<)
+* BSR (>)
+* NOT (~)
+* GOTO (G)
+* IF x GOTO (I) 
+* IF !x GOTO (i)
+* WAIT ms (W)
+* WAIT us (w)
+* SYSTEM (!)
+* SCRIPT (s)
+* ENDSCRIPT (E)
+* RUN (r)
+* RUN&WAIT (R)
+* DEBUG (d)
+
+Arguments
+
+* DIO[#]
+* AI[#]
+* PWM[#]
+* TMR[#]
+
+Example: noduino 'dw(13, 1)' becomes 'SET DIO[13],1'
+
 # additional low-level interfaces
 
 WS2812 interface
