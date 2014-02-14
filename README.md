@@ -136,31 +136,39 @@ more-than-one-per-cycle manner, but that'll probably come in a later implementat
 
 # script commands
 
-* SETMODE
-* SERVO
-* SET (=)
-* GET (g)
-* ADD (+)
-* SUB (-)
-* MUL (*)
-* DIV (/)
-* MOD (%)
-* AND (&)
-* OR (|)
-* BSL (<)
-* BSR (>)
-* NOT (~)
-* GOTO (G)
-* IF x GOTO (I) 
-* IF !x GOTO (i)
-* WAIT ms (W)
-* WAIT us (w)
-* SYSTEM (!)
-* SCRIPT (s)
-* ENDSCRIPT (E)
-* RUN (r)
-* RUN&WAIT (R)
-* DEBUG (d)
+* SETMODE pin, dir: Set pin direction
+* SERVO ATTACH pin, min, max: Enable servo
+* SERVO WRITE pin, value: Write to servo
+* SERVO DETACH pin: Disable servo
+* SET dst, value (=): dst = value
+* GET src (g): returns src
+* ADD dst, src (+): dst = dst + src
+* SUB dst, src (-): dst = dst - src
+* MUL dst, src (*): dst = dst * src
+* DIV dst, src (/): dst = dst / src
+* MOD dst, src (%): dst = dst % src
+* AND dst, src (&): dst = dst & src
+* OR dst, src (|): dst = dst | src
+* BSL dst, src (<): dst = dst << src
+* BSR dst, src (>): dst = dst >> src
+* NOT dst (~): dst = ~dst
+* GOTO addr (G): Go to addr
+* IF x condition y, addr (I): On test true, go to addr
+* UNLESS x condition y, addr (i): On test false, go to addr
+* INT event, addr (V): On event, go to addr 
+* DETACH event (v): Remove interrupt event
+* RETURN (.): Return to previous execution point when interrupted
+* WAIT ms (W): Delay for ms
+* WAIT us (w): Delay for ms
+* SYSTEM (!): TBD
+* SCRIPT (s): Start script saving off code to run in an array
+* ENDSCRIPT (E): End script going back to immediate interpretation
+* LBL reg (L): Save address of point in script into register to pass to GOTO/IF/UNLESS/INT
+* RUN (r): Begin executing script
+* RUN&WAIT (R): Execute script and wait for completion before accepting new commands
+* DEBUG (d): Return debug information during execution
+* VER (v): Return interpreter version
+* SPEED clocks (S): Set number of clocks between instruction execution
 
 Arguments
 
