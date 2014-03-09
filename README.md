@@ -70,7 +70,7 @@ Examples usage *(HIGH speed ioctl/spidev usage)*:
 		$ cat /proc/misc | grep pru_leds
 		 59 pru_leds
 		$ mknod /dev/pruleds0.0 c 10 59
-		$ echo "m 30" > /dev/pruleds0.0
+		$ echo "m 30" > /dev/vport0p0
 
 		** Install OLA and use the examples/spidev-pru.conf **
 
