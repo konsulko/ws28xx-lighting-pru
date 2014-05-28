@@ -3,7 +3,7 @@
 
 	.include "ws28xx-inc.asm"
 
-	.sect "text:main"
+	.sect ".text:main"
 	.global main
 
 main:
