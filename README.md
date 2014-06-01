@@ -77,8 +77,7 @@ Examples usage *(HIGH speed ioctl/spidev usage)*:
 
 Important Notes:
 
-* Will only build with TI 1.0.0 beta PRU compiler
- * Cregister access and overall ABI is different in 2.0.0 beta
+* Will only build with TI 2.0.0 beta PRU compiler
 * Disable HDMI out on BeagleBone Black to free up PRU pins
  * "optargs=capemgr.disable\_partno=BB-BONELT-HDMI,BB-BONELT-HDMIN" in /boot/uEnv.txt
 * Blanking only has to be called once per universe unless you are changing slot count
