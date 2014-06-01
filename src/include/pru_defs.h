@@ -3,41 +3,12 @@
 
 volatile register unsigned int __R31;
 volatile register unsigned int __R30;
-extern cregister void *C0;	/* PINTC */
-extern cregister void *C1;
-extern cregister void *C2;
-extern cregister void *C3;
-extern cregister void *C4;	/* PRUCFG */
-extern cregister void *C5;
-extern cregister void *C6;
-extern cregister void *C7;
-extern cregister void *C8;
-extern cregister void *C9;
-extern cregister void *C10;
-extern cregister void *C11;
-extern cregister void *C12;
-extern cregister void *C13;
-extern cregister void *C14;
-extern cregister void *C15;
-extern cregister void *C16;
-extern cregister void *C17;
-extern cregister void *C18;
-extern cregister void *C19;
-extern cregister void *C20;
-extern cregister void *C21;
-extern cregister void *C22;
-extern cregister void *C23;
-extern cregister void *C24;
-extern cregister void *C25;
-extern cregister void *C26;	/* IEP */
-extern cregister void *C27;
-extern cregister void *C28;	/* local pointer */
-extern cregister void *C29;
-extern cregister void *C30;
-extern cregister void *C31;
+ 
+__far volatile char C0[0x300] __attribute__((cregister("C0", far)));	/* PINTC */
+__far volatile char C4[0x100] __attribute__((cregister("C4", near)));	/* PRUCFG */
 
 #define PRUCFG(_reg) \
-	(*(volatile u32 *)((char *)C4 + (_reg)))
+	(*(volatile u32 *)((char *)&C4 + (_reg)))
 
 /* fast access to the registers using the constants */
 #define PRUCFG_REVID	PRUCFG(0x0000)
@@ -378,7 +349,7 @@ extern cregister void *C31;
 #define PRUCFG_PINMX	PRUCFG(0x0040)
 
 #define PINTC(_reg) \
-	(*(volatile u32 *)((char *)C0 + (_reg)))
+	(*(volatile u32 *)((char *)&C0[_reg]))
 
 #define PINTC_REVID		PINTC(0x0000)
 #define PINTC_CR		PINTC(0x0004)
@@ -392,100 +363,8 @@ extern cregister void *C31;
 #define PINTC_HIDISR		PINTC(0x0038)
 #define PINTC_GPIR		PINTC(0x0080)
 #define PINTC_SRSR0		PINTC(0x0200)
-#define PINTC_SRSR1		PINTC(0x0204)
 #define PINTC_SECR0		PINTC(0x0280)
-#define PINTC_SECR1		PINTC(0x0284)
 #define PINTC_ESR0		PINTC(0x0300)
-#define PINTC_ESR1		PINTC(0x0304)
-#define PINTC_ECR0		PINTC(0x0380)
-#define PINTC_ECR1		PINTC(0x0384)
-#define PINTC_CMR0		PINTC(0x0400)
-#define PINTC_CMR1		PINTC(0x0404)
-#define PINTC_CMR2		PINTC(0x0408)
-#define PINTC_CMR3		PINTC(0x040C)
-#define PINTC_CMR4		PINTC(0x0410)
-#define PINTC_CMR5		PINTC(0x0414)
-#define PINTC_CMR6		PINTC(0x0418)
-#define PINTC_CMR7		PINTC(0x041C)
-#define PINTC_CMR8		PINTC(0x0420)
-#define PINTC_CMR9		PINTC(0x0424)
-#define PINTC_CMR10		PINTC(0x0428)
-#define PINTC_CMR11		PINTC(0x042C)
-#define PINTC_CMR12		PINTC(0x0430)
-#define PINTC_CMR13		PINTC(0x0434)
-#define PINTC_CMR14		PINTC(0x0438)
-#define PINTC_CMR15		PINTC(0x043C)
-#define PINTC_HMR0		PINTC(0x0800)
-#define PINTC_HMR1		PINTC(0x0804)
-#define PINTC_HMR2		PINTC(0x0808)
-#define PINTC_HIPIR0		PINTC(0x0900)
-#define PINTC_HIPIR1		PINTC(0x0904)
-#define PINTC_HIPIR2		PINTC(0x0908)
-#define PINTC_HIPIR3		PINTC(0x090C)
-#define PINTC_HIPIR4		PINTC(0x0910)
-#define PINTC_HIPIR5		PINTC(0x0914)
-#define PINTC_HIPIR6		PINTC(0x0918)
-#define PINTC_HIPIR7		PINTC(0x091C)
-#define PINTC_HIPIR8		PINTC(0x0920)
-#define PINTC_HIPIR9		PINTC(0x0924)
-#define PINTC_SIPR0		PINTC(0x0D00)
-#define PINTC_SIPR1		PINTC(0x0D04)
-#define PINTC_SITR0		PINTC(0x0D80)
-#define PINTC_SITR1		PINTC(0x0D84)
-#define PINTC_HINLR0		PINTC(0x1100)
-#define PINTC_HINLR1		PINTC(0x1104)
-#define PINTC_HINLR2		PINTC(0x1108)
-#define PINTC_HINLR3		PINTC(0x110C)
-#define PINTC_HINLR4		PINTC(0x1110)
-#define PINTC_HINLR5		PINTC(0x1114)
-#define PINTC_HINLR6		PINTC(0x1118)
-#define PINTC_HINLR7		PINTC(0x111C)
-#define PINTC_HINLR8		PINTC(0x1120)
-#define PINTC_HINLR9		PINTC(0x1124)
-#define PINTC_HIER		PINTC(0x1500)
-
-/* PRU Industrial Ethernet Peripheral */
-#define PIEP(_reg) \
-	(*(volatile u32 *)((char *)C26 + (_reg)))
-
-#define PIEP_GLOBAL_CFG		PIEP(0x0000)
-#define  GLOBAL_CFG_CNT_ENABLE		(1 << 0)
-#define  GLOBAL_CFG_DEFAULT_INC_S	4
-#define  GLOBAL_CFG_DEFAULT_INC_W	4
-#define  GLOBAL_CFG_DEFAULT_INC_M	((GLOBAL_CFG_DEFAULT_INC_W - 1) << GLOBAL_CFG_DEFAULT_INC_S)
-#define  GLOBAL_CFG_DEFAULT_INC(x)	(((x) << GLOBAL_CFG_DEFAULT_INC_S) & GLOBAL_CFG_DEFAULT_INC_M)
-#define  GLOBAL_CFG_CMP_INC_S		8
-#define  GLOBAL_CFG_CMP_INC_W		12
-#define  GLOBAL_CFG_CMP_INC_M		((GLOBAL_CFG_CMP_INC_W - 1) << GLOBAL_CFG_CMP_INC_S)
-#define  GLOBAL_CFG_CMP_INC(x)		(((x) << GLOBAL_CFG_CMP_INC_S) & GLOBAL_CFG_CMP_INC_M)
-
-#define PIEP_GLOBAL_STATUS	PIEP(0x0004)
-#define  GLOBAL_STATUS_CNT_OVF		(1 << 0)
-
-#define PIEP_COMPEN		PIEP(0x0008)
-#define PIEP_COUNT		PIEP(0x000C)
-#define PIEP_CMP_CFG		PIEP(0x0040)
-#define  CMP_CFG_CMP0_RST_CNT_EN	(1 << 0)
-#define  CMP_CFG_CMP_EN_S		1
-#define  CMP_CFG_CMP_EN_W		8
-#define  CMP_CFG_CMP_EN_M		((CMP_CFG_CMP_EN_W - 1) << CMP_CFG_CMP_EN_S)
-#define  CMP_CFG_CMP_EN(x)		((1 << ((x) + CMP_CFG_CMP_EN_S)) & CMP_CFG_CMP_EN_M)
-
-#define PIEP_CMP_STATUS		PIEP(0x0044)
-#define  CMD_STATUS_CMP_HIT_S		0
-#define  CMD_STATUS_CMP_HIT_W		8
-#define  CMD_STATUS_CMP_HIT_M		((CMD_STATUS_CMP_HIT_W - 1) << CMD_STATUS_CMP_HIT_S)
-#define  CMD_STATUS_CMP_HIT(x)		((1 << ((x) + CMD_STATUS_CMP_HIT_S)) & CMD_STATUS_CMP_HIT_M)
-
-#define PIEP_CMP_CMP0		PIEP(0x0048)
-#define PIEP_CMP_CMP1		PIEP(0x004C)
-#define PIEP_CMP_CMP2		PIEP(0x0050)
-#define PIEP_CMP_CMP3		PIEP(0x0054)
-#define PIEP_CMP_CMP4		PIEP(0x0058)
-#define PIEP_CMP_CMP5		PIEP(0x005C)
-#define PIEP_CMP_CMP6		PIEP(0x0060)
-#define PIEP_CMP_CMP7		PIEP(0x0064)
-#define PIEP_CMP_CMP(x)		PIEP(0x0048 + ((x) << 2))
 
 #if defined(PRU0) || defined(PRU1)
 
@@ -527,10 +406,6 @@ extern cregister void *C31;
 #endif
 
 #endif
-
-/* secondary access by C28 (which must point to 0x20200 */
-#define PINTC_0200(_reg) \
-	(*(volatile u32 *)((char *)C28 + ((_reg) - 0x200)))
 
 #define SIGNAL_EVENT(x) \
 	do { \
