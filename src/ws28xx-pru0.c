@@ -183,7 +183,7 @@ static int event_thread(struct pt *pt)
 	static struct pru_vring_elem pvre;
 	static u16 idx, count;
 	static u32 rx_len, len;
-	struct vring_desc *vrd;
+	static struct vring_desc *vrd;
 	static char *ptr;
 
 	PT_BEGIN(pt);
